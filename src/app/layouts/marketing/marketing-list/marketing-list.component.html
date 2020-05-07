@@ -1,0 +1,93 @@
+<br>
+<div class="container">
+  <div class="row" *ngIf="authService.isAdmin()">
+    <div class="col-sm">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="brand_select">Marketing:</label>
+        <select class="form-control" name="" id="brand_select" [(ngModel)]="selectedBrand">
+          <option *ngFor="let brand of brands" [ngValue]="brand">{{brand}}</option>
+        </select>
+      </div>
+      <ul class="list-group">
+        <li class="list-group-item">°-°</li>
+        <li class="list-group-item">*~*</li>
+        <li class="list-group-item">0_o</li>
+      </ul>
+    </div>
+    <div class="col-md-9">
+
+      <div class="container">
+        <app-card-loader [loop]="3" [height]="800" *ngIf="loading"></app-card-loader>
+        <div class="row" *ngIf="!loading">
+          <!-- List of marketing -->
+          <div class="col-sm-4 mb-2" *ngFor="let marketingtest of marketingList | filterByBrand: selectedBrand | paginate: { itemsPerPage: 6, currentPage: page }">
+            <div class="item">
+              <div class=" mb-r">
+                <!--Card-->
+                <div class="card card-cascade wider">
+                  <!--Card image-->
+                  <a [routerLink]="['/marketing/marketingtest', marketingtest.$key]">
+                    <div class="view overlay hm-white-slight">
+                      <img [src]="marketingtest.imageurl" class="img-fluid" alt="" width="360px" height="640px">
+                      <a>
+                        <div class="mask waves-effect waves-light" mdbRippleRadius></div>
+                      </a>
+                    </div>
+                  </a>
+                  <!--/.Card image-->
+                  <!--Card content-->
+                  <div class="card-body text-center no-padding">
+                    <!--Category & Title-->
+                    <a class="text-muted">
+                      <h5 id="textprin">{{ marketingtest.description }}</h5>
+                    </a>
+                    <p class="card-title">
+                      <strong>
+                        <a [routerLink]="['/marketing/marketingtest', marketingtest.$key]" routerLinkActive="router-link-active">{{
+                          marketingtest.promo }}</a>
+                      </strong>
+                    </p>
+                    <!--Description-->
+                    <p class="card-text">{{ marketingtest.sucid }}
+                    </p>
+                    <!--Card footer-->
+                    <div class="card-footer">
+                      <span class="left">₹ {{ marketingtest.price }}</span>
+                      <span class="right">
+
+                        <!--Delete card-->
+                        <!--<a placement="top" mdbTooltip="Remove Marketingtest" container="body"  (click)="removeMarketing(marketingtest.$key)">
+                          <i class="fa fa-trash-o fa-2x"></i>
+                        </a>-->
+
+                        <a placement="top" mdbTooltip="Remove Marketingtest" container="body" *ngIf="authService.isAdmin()"
+                          (click)="removeMarketing(marketingtest.$key)">
+                          <i class="fa fa-trash-o fa-2x"></i>
+                        </a>
+                      </span>
+                    </div>
+
+                  </div>
+                  <!--/.Card content-->
+
+                </div>
+                <!--/.Card-->
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Pagination -->
+        <div class="text-center mt-3">
+          <pagination-controls (pageChange)="page = $event"></pagination-controls>
+        </div>
+      </div>
+      <!--/.Card-->
+    </div>
+  </div>
+</div>
+<app-add-marketingtest></app-add-marketingtest>
